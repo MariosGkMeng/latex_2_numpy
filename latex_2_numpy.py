@@ -272,6 +272,9 @@ def expression__latex(x, id = 0):
 #---- 4.✔️ Example 11: Need fix 5✔️
 #---- 5.✔️ Example 12: Ruined by 'Sec. 3'
 
+# ⚒️ Fixes
+# ⚠️1. Example-13 fixed using patch: "⚠️/Weak-Coding-2"
+
 
 
 #     i,                       Comment, Status, Sec.,     Expression to convert
@@ -286,11 +289,12 @@ EXAMPLES = [
    [ '8',          'Relevant equation', '✔️', '3', 'xu_{tot}=interpolate(X_{solv},y)'],
    [ '9',          'Relevant equation', '✔️', '',  'X_{solv}=g_{idx}'],
    ['10',     'Two equations in a row', '❌', '',  'A = \left[ {\begin{array}{cc}  -1 & 0 & 0 \\ 0 & -1  & 0\\ 0 & 1  & 0 \\ 0 & 0  & -1\end{array} } \right], \space \space \space b^{T}=\left[ {\begin{array}{cc}  10 & 0 & -1 & 0.1 \end{array} } \right]'],
-   ['11',            'Pertaining ✔️4', '✔️', '3',  'x \in \mathbb{R}^{n}'],
-   ['12',                          '',  '✔️', '',  'b^{T}=\left[ {\begin{array}{cc}  10 & 0 & -1 & 0.1 \end{array} } \right]']
+   ['11',            'Pertaining ✔️4', '✔️', '',   'x \in \mathbb{R}^{n}'],
+   ['12',                          '',  '✔️', '',  'b^{T}=\left[ {\begin{array}{cc}  10 & 0 & -1 & 0.1 \end{array} } \right]'],
+   ['13',            'Pertaining ✔️4', '✔️', '',   'A \in \mathbb{R}^{n \times 2}']
 ]
 
-I__TEST_EXAMPLE = 5
+I__TEST_EXAMPLE = 13
 
 s = EXAMPLES[I__TEST_EXAMPLE-1][-1]
 
@@ -417,9 +421,15 @@ signature = '\in \mathbb{R}^'
 
 i_sig = s.find(signature)
 if i_sig != -1:
-    domain = re.findall('\{\w*\}', s[i_sig + len(signature):])[0].replace('{', '').replace('}', '')
+    domain_str = s[i_sig + len(signature):]
     
-    t = '\times'
+    # ⚠️/Weak-Coding-2: We are allowing for any type of string inside the braces
+    #   The developer might write something wrong and we are not preventing it
+    domain = re.findall('\{[\w,\W]*\}', domain_str)[0].replace('{', '').replace('}', '')
+    #
+    
+    
+    t = ' \times '
     if t in domain:
         domain = domain.split(t)
     else:
@@ -639,7 +649,7 @@ s2 = ''.join(pcT).replace(comma_operator, ', ')
 # ================================================================================================================================
 
 
-# ⚠️/Weak-Coding: Remove remaining braces ================================================================================================================================
+# ⚠️/Weak-Coding-1: Remove remaining braces ================================================================================================================================
 s2 = s2.replace('{', '(').replace('}', ')')
 # ================================================================================================================================
 
