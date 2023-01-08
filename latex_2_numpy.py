@@ -7,11 +7,13 @@ import re
 D = dict()
 D['pars'] = dict(
     {
-     'brace-open':   +1,
-     'brace-closed': -1
-     }
+            'brace-open': +1,
+          'brace-closed': -1,
+     'special-operators': dict({
+                        'comma': '\🐯'
+        })
+    }
 )
-
 
 D['latex_functions'] = [
     ['\\frac{}{}',              '()/()'],
@@ -228,6 +230,93 @@ def expression__latex(x, id = 0):
     return y
     
     
+def get_brace_map(s, type):
+
+    '''
+    ➕ --> write description
+    
+    '''
+    s0 = type[0]
+    s1 = type[1]
+
+    if isinstance(s, str):
+        indices_open   = [index for index in range(len(s)) if s.startswith(s0, index)]
+        indices_closed = [index for index in range(len(s)) if s.startswith(s1, index)]
+    elif isinstance(s, list):
+        indices_open   = [index for index in range(len(s)) if s[index] == s0]
+        indices_closed = [index for index in range(len(s)) if s[index] == s1]
+        
+
+    dum1 = [D['pars']['brace-open']   for x in indices_open]
+    dum2 = [D['pars']['brace-closed'] for x in indices_closed]
+
+
+    Lx1 = len(indices_open)
+    Lx2 = len(indices_closed)
+    Lx = Lx1+Lx2
+
+    brace_map = np.linalg.init_matrix([3, Lx])
+
+    brace_map[0][:] = dum1 + dum2
+    brace_map[1][:] = indices_open + indices_closed
+
+
+    i_sort = np.argsort(brace_map[1][:])
+
+    brace_map[0][:] = brace_map[0][i_sort]
+    brace_map[1][:] = brace_map[1][i_sort]
+    
+    d = np.linalg.init_matrix([Lx])
+    d0 = 0
+
+    for i in range(len(d)): 
+        d[i] = brace_map[0][i] + d0
+        d0 = d[i]
+        
+    brace_map[2][:] = d 
+    
+    return brace_map
+
+    
+
+def categorize_parenthesis_opening(x):
+    
+    '''
+    ➕ --> write description
+    
+    '''    
+    comma_operator = D['pars']['special-operators']['comma'].replace('\\', '')
+
+    
+    idx = [i+1 for i,p in enumerate(x[1:]) if p[1]=='(' and x[i-1][2]]
+    x1 = [y[1] for y in x]    
+    brace_map = get_brace_map(x1,'()')
+    # idx0 = [i+1 for i,p in enumerate(x[1:]) if p[1]=='(']
+    # idx1 = [i+1 for i,p in enumerate(x[1:]) if p[1]==')']
+    Lx = len(brace_map[0])
+    parenthesis_category = []
+    for i in range(Lx):
+        B = [q[i] for q in brace_map]
+        if B[0] == 1:
+            # parenthesis open
+            # search rest until parenthesis closed
+            criterion = False
+            for k in range(i, Lx):
+                
+                # ⬇️ parenthesis has closed
+                if brace_map[2][k] == B[2]-1: break
+                idxC = brace_map[1][k]
+                # ⬇️ Check criterion
+                
+                
+            for j in range(int(brace_map[1][i]), int(brace_map[1][k])):
+                criterion = comma_operator in x1[j]    
+                if criterion: break
+            
+            parenthesis_category.append([i, criterion])              
+    
+    return parenthesis_category
+    
 # 🗃️ Namespace 
 # 1. ⚠️/Weak-Coding: Whenever I write something that has weak coding inside
 # 2. 🔗: Links to whatever recedes it
@@ -266,14 +355,29 @@ def expression__latex(x, id = 0):
 # 🔴 ERROR CASES
 # 1. Does not convert power operation when the power is not inside braces (e.g. x^2 instead of x^{2})
 #    💡1
+# 6. Example 14: "dot{x}" is not converted properly
+# 7. Example 14: Multiplication not triggered before "("
+
 ## Completed
 #---- 2.✔️ Example  8: Confuses "interpolate" for a variable and adds "*" in between
 #---- 3.✔️ Example  8: Even if "interpolate" was a variable, the multiplication is done wrong
 #---- 4.✔️ Example 11: Need fix 5✔️
 #---- 5.✔️ Example 12: Ruined by 'Sec. 3'
+#---- 7.✔️ Example 14: "\beta" is converted erratically
 
+#           - See ⚒️-2
 # ⚒️ Fixes
 # ⚠️1. Example-13 fixed using patch: "⚠️/Weak-Coding-2"
+#   2. Replace '\beta' with '\\beta'
+# ⚠️3. Issue ✔️5 fixed using patch: "⚠️/Weak-Coding-3"
+#      - It is a patch because it is not a systematic solution
+#           - with this we avoid multiplying with an expression that starts with '(' (error case 🔴7)
+#      - Ideas on how to fix:
+#           - We could identify which parentheses correspond to a function definition and then assign them the True/False values
+#               - Examples:
+#                   - P(expr1, expr2) ---transf---> same
+#                       - can just get all expressions (parent and children) and then see if there are commas inside themf
+#                   - P(expr1+expr2) ---transf---> P*(expr1+expr2) (⚠️ unless P is a function as well!)
 
 
 
@@ -291,10 +395,11 @@ EXAMPLES = [
    ['10',     'Two equations in a row', '❌', '',  'A = \left[ {\begin{array}{cc}  -1 & 0 & 0 \\ 0 & -1  & 0\\ 0 & 1  & 0 \\ 0 & 0  & -1\end{array} } \right], \space \space \space b^{T}=\left[ {\begin{array}{cc}  10 & 0 & -1 & 0.1 \end{array} } \right]'],
    ['11',            'Pertaining ✔️4', '✔️', '',   'x \in \mathbb{R}^{n}'],
    ['12',                          '',  '✔️', '',  'b^{T}=\left[ {\begin{array}{cc}  10 & 0 & -1 & 0.1 \end{array} } \right]'],
-   ['13',            'Pertaining ✔️4', '✔️', '',   'A \in \mathbb{R}^{n \times 2}']
+   ['13',            'Pertaining ✔️4', '✔️', '',   'A \in \mathbb{R}^{n \times 2}'],
+   ['14',                          '', '❌', '',   '\dot{P}=\beta P - P \frac{\phi \phi^{T}}{m^{2}}P + interpolate(X_{solv},y)']
 ]
 
-I__TEST_EXAMPLE = 13
+I__TEST_EXAMPLE = 14
 
 s = EXAMPLES[I__TEST_EXAMPLE-1][-1]
 
@@ -326,45 +431,15 @@ s = EXAMPLES[I__TEST_EXAMPLE-1][-1]
 # 3. Can I do a "ML" like approach? Like, give a few samples and say how the lines are separated
 
 s = s.replace('\frac', '\\frac')
+s = s.replace('\beta', '\\beta')
 
 
 # Sec. 0: Map brace encounters and get in-brace expressions ================================================================
-indices_open   = [index for index in range(len(s)) if s.startswith('{', index)]
-indices_closed = [index for index in range(len(s)) if s.startswith('}', index)]
 
-dum1 = [D['pars']['brace-open']   for x in indices_open]
-dum2 = [D['pars']['brace-closed'] for x in indices_closed]
+brace_map = get_brace_map(s, '{}')
+Lx = len(brace_map[0])
 
-
-Lx1 = len(indices_open)
-Lx2 = len(indices_closed)
-Lx = Lx1+Lx2
-
-brace_map = np.linalg.init_matrix([3, Lx])
-
-brace_map[0][:] = dum1 + dum2
-brace_map[1][:] = indices_open + indices_closed
-
-
-i_sort = np.argsort(brace_map[1][:])
-
-brace_map[0][:] = brace_map[0][i_sort]
-brace_map[1][:] = brace_map[1][i_sort]
-
-
-
-d = np.linalg.init_matrix([Lx])
-d0 = 0
-
-for i in range(len(d)): 
-    d[i] = brace_map[0][i] + d0
-    d0 = d[i]
-    
-brace_map[2][:] = d
-
-
-# Get expressions
-
+# Get expressions using brace_map
 d = np.linalg.init_matrix([1+Lx])
 d[1:] = brace_map[2][:]
 expressions = []
@@ -376,18 +451,23 @@ i_expr = 0
 i_expr_master = np.nan
 master_expressions = []
 while i < Lx:
+    
+    # ⬇️ If parenthesis/bracket/brace opens
     if df[i] == 1:
-        if i == 0:
-            i_expr_master = i_expr
-            master_expressions.append(i_expr_master)
-        elif brace_map[2][i] == 1 and brace_map[2][i-1]==0:
+             
+        if (i == 0) or (brace_map[2][i] == 1 and brace_map[2][i-1]==0):
              i_expr_master = i_expr
              master_expressions.append(i_expr_master)
+        # else:
+        #     raise Exception('Nothing Coded Here')
+
         expression_number.append(i_expr)
         i_expr += 1
         for j in range(i+1,Lx):
-            if brace_map[2][j] == brace_map[2][i]-1: 
-                break
+            
+            brace_closes_here = brace_map[2][j] == brace_map[2][i] - 1
+            
+            if brace_closes_here: break
             
         if (brace_map[2][i] > brace_map[2][i-1]) and brace_map[2][i] > 1:
             # Nested expression
@@ -596,7 +676,7 @@ for M in matrices:
 
 ### Examples
 ex1_done = 'S_P S_H+ a1A+Bb**2 +B / (12 + A B)'
-comma_operator = '\🐯' # because regex doesn't let me!
+comma_operator = D['pars']['special-operators']['comma'] # because regex doesn't let me!
 s1 = s1.replace(',', comma_operator)
 patt1 = r"\b[a-zA-Z]\w*"
 patt2 = '['+comma_operator+',a-z,A-Z,0-9,\-,\+,\*\*,\(,\),\{,\},/,\_,=,\.,\[,\]]*'
@@ -609,12 +689,18 @@ comma_operator = comma_operator.replace('\\', '')
 operators = "+", "-", "**", "*", "/", "(", ")", "{", "}", " ", "==", "=", "[", "]", comma_operator
 regex_pattern = '|'.join(map(re.escape, operators))
 
-# toRemove = ['(', ')', '{', '}']
-toRemove = [')', '{', '}']
+# ⚠️/Weak-Coding-3: we are not removing '(', because it might be a start to a function call. It's a patch for problem: ✔️5 
+
+toRemove1 = ['{', '}'] 
+toRemove = toRemove1 + [')'] # instead of: toRemove = ['(', ')', '{', '}']
+#
+
 listOperators = ['np.array', '**', '*', '/', '+', '-', '==', '=', ',', comma_operator, '(', "[", "]"]
 has_variable = False
 to_append_multiplication_after = []
 pcT = []
+
+
 for i, p in enumerate(popo):
     pc = re.split('('+regex_pattern+')', p)
     
@@ -631,8 +717,19 @@ for i, p in enumerate(popo):
     pc = [x for x in pc if len(x)>0 and x != ' ']
     pcT += pc
 
-    
+
+
+
 pc1 = [[i, x, (x in listOperators)] for i, x in enumerate(pcT) if not x in toRemove]
+pc2 = [[i, x, (x in listOperators)] for i, x in enumerate(pcT) if not x in toRemove1]
+
+# Categorize parenthesis opening to expression and function
+
+parenthesis_category = categorize_parenthesis_opening(pc2)
+
+
+#
+
 pc1Conds = [x[2] for x in pc1]
 for i_pc in range(len(pc1Conds[:-1])):
     if not (pc1Conds[i_pc] or pc1Conds[i_pc+1]):
@@ -649,7 +746,7 @@ s2 = ''.join(pcT).replace(comma_operator, ', ')
 # ================================================================================================================================
 
 
-# ⚠️/Weak-Coding-1: Remove remaining braces ================================================================================================================================
+# ⚠️/Weak-Coding: Remove remaining braces ================================================================================================================================
 s2 = s2.replace('{', '(').replace('}', ')')
 # ================================================================================================================================
 
