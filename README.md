@@ -22,7 +22,7 @@ for j in range(max_length/dt):
 		[~, idx_max_u] = np.max(Q_a_cond_s)
 		u_j = p.X_discrete(end, idx_max_u)
 	
-	u = [u, u_j]
+	u.append(u_j)
 
 	# Simulate one timestep using forward Euler
 	y0, I0 = discrete_S_A([x0, u_j], p)
@@ -59,10 +59,14 @@ for j in range(max_length/dt):
 ```
 
 $\text{for } j = 1,..,\frac{L_{max}}{2}$
-
-
-
-
+$\space \space \space \space \text{Take a random action in the interval  drawn from a uniform probability distribution}$
+$\space \space \space \space \epsilon\_greedy\_\_get\_random\_{u}=rand < \epsilon$
+$\space \space \space \space\text{if } \epsilon\_greedy\_\_get\_random\_{u}:$
+$\space \space \space \space \space \space \space \space u_{j} = -\tau_{lim} + 2 \tau_{lim} \cdot u_{rnd}  \text{, with } u_{rnd} \in \mathbb{U}(0,1)$
+$\space \space \space \space else:$
+$\space \space \space \space \space \space \space \space Q\_a\_cond\_{s} = Q_{table_{I_{1},I_{2},*}}$
+$\space \space \space \space \space \space \space \space i_{max_{u}} =i: Q\_a\_cond\_{s}_{i}=max(Q\_a\_cond\_{s})$
+$\space \space \space \space \space \space \space \space u_{j} = p.X_{{discrete}_{end,i_{max_{u}}}}$
 
 
 
