@@ -58,6 +58,8 @@ for j in range(max_length/dt):
 
 ```
 
+$\frac{L_{max}}{2}$
+
 $\text{for } j = 1,..,\frac{L_{max}}{2}$
 $\space \space \space \space \text{Take a random action in the interval  drawn from a uniform probability distribution}$
 $\space \space \space \space \epsilon\_greedy\_\_get\_random\_{u}=rand < \epsilon$
