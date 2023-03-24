@@ -1,7 +1,7 @@
-# What?
+# ❓ What?
 A Python module that converts Latex equations to numpy.
 
-# Why?
+# 🤔 Why?
 
 1. It is easier to write and **review** a scientific-computing algorithm using the original mathematical syntax, rather than the computer programming expression
 2. It can be linked to scientific documentation and even publications, without the need to program something from the beginning
