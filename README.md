@@ -21,3 +21,9 @@ See the python code (left), compared to the math format on the right.
 
 <img width="727" alt="image" src="https://user-images.githubusercontent.com/61937432/227475003-9d2ccb3d-7687-477a-8f4f-39bd6dba26d3.png">
 
+# 👩‍💻👨‍💻📅 General Roadmap
+
+1. Obsidian to python-numpy converter (ongoing)
+2. python-outputs communicator to Obsidian
+3. error-handling module in Obsidian
+    - Even better: intelligent error-correction for Obsidian-coding
