@@ -27,3 +27,4 @@ See the python code (left), compared to the math format on the right.
 2. python-outputs communicator to Obsidian
 3. error-handling module in Obsidian
     - Even better: intelligent error-correction for Obsidian-coding
+4. Adjusting appearance of obsidian-latex commands (possibly a separate Obsidian plugin)
