@@ -1,9 +1,10 @@
 # ❓ What?
 A Python module that converts Latex equations to numpy.
+The user writes the commands in a Latex format (instead of a computer language format) in Obsidian environment (let's call it *Obsitex*), the commands are translated into python numpy, the calculations are carried out in the background and the output is shown in the Obsidian environment.
 
 # 🤔 Why?
 
-1. It is easier to write and **review** a scientific-computing algorithm using the original mathematical syntax, rather than the computer programming expression
+1. It is easier to write and **review** a scientific-computing algorithm using the original mathematical syntax, rather than the computer programming expression. There's even a concept of ["executable publications"](https://www.nature.com/articles/s42005-020-00403-4), wherein the author provides both the results and discussion, as well as the code-snippets that produced said results. It would be even more readable if this code is written in a mathematical format, rather than a computer-programming format.
 2. It can be linked to scientific documentation and even publications, without the need to program something from the beginning
 3. It can eliminate the need to learn programming-language specific rules (why should you know which module is needed to use linear algebra operations?)
     - With the advent of multidisciplinary collaboration, requiring time to learn programming-language-specific knowledge creates delays and frustration for people who wish to concentrate on the beauty of their science and collaborate with others
