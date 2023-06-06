@@ -16,7 +16,8 @@ The ultimate goal for this tool is to be an autonomous programming language, usi
 Sidenode: The language performing the computations in the background does not need to be Python; it can be anything else that is capable of performing the computations.
 
 
-# Example
+# Example 
+(simple showcasing video is to be uploaded soon)
 A small computational example from the field of Reinforcement Learning can be found at the image below
 See the python code (left), compared to the math format on the right.
 
