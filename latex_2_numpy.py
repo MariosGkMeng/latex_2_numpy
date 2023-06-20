@@ -357,6 +357,11 @@ def categorize_parenthesis_opening(x):
 #    💡1
 # 6. Example 14: "dot{x}" is not converted properly
 # 7. Example 14: Multiplication not triggered before "("
+# 8. Example 15: Requires a function that recognizes iteration index and creates an array, or 2 scalar variables
+# 9. Example 16: 
+#       a. Converts A^{*} to A**(*) ---SOLUTION---> recognize power to "*" and name "A_star"
+#       b. For some reason the multiplication between number and variable is not recognized!
+#               (perhaps the local version in the home-pc hasn't been uploaded)
 
 ## Completed
 #---- 2.✔️ Example  8: Confuses "interpolate" for a variable and adds "*" in between
@@ -396,10 +401,12 @@ EXAMPLES = [
    ['11',            'Pertaining ✔️4', '✔️', '',   'x \in \mathbb{R}^{n}'],
    ['12',                          '',  '✔️', '',  'b^{T}=\left[ {\begin{array}{cc}  10 & 0 & -1 & 0.1 \end{array} } \right]'],
    ['13',            'Pertaining ✔️4', '✔️', '',   'A \in \mathbb{R}^{n \times 2}'],
-   ['14',                          '', '❌', '',   '\dot{P}=\beta P - P \frac{\phi \phi^{T}}{m^{2}}P + interpolate(X_{solv},y)']
+   ['14',                          '', '❌', '',   '\dot{P}=\beta P - P \frac{\phi \phi^{T}}{m^{2}}P + interpolate(X_{solv},y)'],
+   ['15',       'Requires new section', '❌','',   'x_{k+1}=x_{k}+a_{k} \frac{dy(x_{k})}{dx}'],
+   ['16',                           '', '❌', '',  'A^{*} =s^{4}+s^{3}+96.8s^{2}-314.78s+522']
 ]
 
-I__TEST_EXAMPLE = 14
+I__TEST_EXAMPLE = 2
 
 s = EXAMPLES[I__TEST_EXAMPLE-1][-1]
 
