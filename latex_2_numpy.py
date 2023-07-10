@@ -388,25 +388,26 @@ def categorize_parenthesis_opening(x):
 
 #     i,                       Comment, Status, Sec.,     Expression to convert
 EXAMPLES = [
-   [ '1',                           '', '✔️', '',  'proc_{7} = k_{h} \cdot fx(XU_{S_{BH}}, K_{X}) \cdot (S_{O_{rate}} + ny_{h} \cdot S_{NO_{rate}_{eq}}) \cdot X_{BH}'],
-   [ '2',                           '', '✔️', '',  '\\frac{2}{\sqrt{x^{2}+2x+1}}'],
-   [ '3',                           '', '✔️', '',  '\\dot{P}= \\frac{1}{x^{2} + exp(x)} \\beta P - P \\frac{\phi^{exp(x^{2^{2}})} \phi^{T}}{m^{2}}P'],
-   [ '4',     'Testing Array creation', '✔️', '',  'proc = \left[ \begin{array}{cc}  S_{S_{X_{BH}}} \cdot S_{O_{rate}} \\ S_{S_{X_{BH}}} \cdot S_{NO_{rate}} \cdot n_{y,g} \\ \mu_{A} \cdot fx(S_{NH}, K_{NH}) \cdot fx(S_{O}, K_{OA}) \cdot X_{BA} \\ b_{H} \cdot X_{BH} \\ b_{A} \cdot X_{BA} \\ proc_{7} \end{array} \right]'],
-   [ '5',       'Test Matrix creation', '✔️', '',  'Y = \left[ {\begin{array}{cc}  0 & -\frac{1}{Y_{H}} & 0 & 0 & 1 & 0 & 0 & \frac{-(1-Y_{H})}{Y_{H}} & 0 & -i_{XB} & 0 & 0 & -\frac{i_{XB}}{14}\\ 0 & -\frac{1}{Y_{H}} & 0 & 0 & 1 & 0 & 0 & \frac{-(1-Y_{H})}{Y_{H}} & 0 & -i_{XB} & 0 & 0 & -\frac{i_{XB}}{14} \end{array} } \right]'],
-   [ '6','Just some relevant equation', '✔️', '',  '\epsilon = \frac{{z-\theta^{T} \phi}}{1+\phi^{T}\phi}'],
-   [ '7',          'Relevant equation', '✔️', '',  '\phi=\left[ {\begin{array}{cc}  {C_{f,3}} x_{\phi}+{D_{f,3}} y \\ {C_{f,2}}  x_{\phi}+D_{f,2} y \\ C_{f,1} x_{\phi}+{D_{f,1}} y \end{array} } \right]'],
-   [ '8',          'Relevant equation', '✔️', '3', 'xu_{tot}=interpolate(X_{solv},y)'],
-   [ '9',          'Relevant equation', '✔️', '',  'X_{solv}=g_{idx}'],
-   ['10',     'Two equations in a row', '❌', '',  'A = \left[ {\begin{array}{cc}  -1 & 0 & 0 \\ 0 & -1  & 0\\ 0 & 1  & 0 \\ 0 & 0  & -1\end{array} } \right], \space \space \space b^{T}=\left[ {\begin{array}{cc}  10 & 0 & -1 & 0.1 \end{array} } \right]'],
-   ['11',            'Pertaining ✔️4', '✔️', '',   'x \in \mathbb{R}^{n}'],
-   ['12',                          '',  '✔️', '',  'b^{T}=\left[ {\begin{array}{cc}  10 & 0 & -1 & 0.1 \end{array} } \right]'],
-   ['13',            'Pertaining ✔️4', '✔️', '',   'A \in \mathbb{R}^{n \times 2}'],
-   ['14',                          '', '❌', '',   '\dot{P}=\beta P - P \frac{\phi \phi^{T}}{m^{2}}P + interpolate(X_{solv},y)'],
-   ['15',       'Requires new section', '❌','',   'x_{k+1}=x_{k}+a_{k} \frac{dy(x_{k})}{dx}'],
-   ['16',                           '', '❌', '',  'A^{*} =s^{4}+s^{3}+96.8s^{2}-314.78s+522']
+   [ '1',                            '', '✔️', '',  'proc_{7} = k_{h} \cdot fx(XU_{S_{BH}}, K_{X}) \cdot (S_{O_{rate}} + ny_{h} \cdot S_{NO_{rate}_{eq}}) \cdot X_{BH}'],
+   [ '2',                            '', '✔️', '',  '\\frac{2}{\sqrt{x^{2}+2x+1}}'],
+   [ '3',                            '', '✔️', '',  '\\dot{P}= \\frac{1}{x^{2} + exp(x)} \\beta P - P \\frac{\phi^{exp(x^{2^{2}})} \phi^{T}}{m^{2}}P'],
+   [ '4',      'Testing Array creation', '✔️', '',  'proc = \left[ \begin{array}{cc}  S_{S_{X_{BH}}} \cdot S_{O_{rate}} \\ S_{S_{X_{BH}}} \cdot S_{NO_{rate}} \cdot n_{y,g} \\ \mu_{A} \cdot fx(S_{NH}, K_{NH}) \cdot fx(S_{O}, K_{OA}) \cdot X_{BA} \\ b_{H} \cdot X_{BH} \\ b_{A} \cdot X_{BA} \\ proc_{7} \end{array} \right]'],
+   [ '5',        'Test Matrix creation', '✔️', '',  'Y = \left[ {\begin{array}{cc}  0 & -\frac{1}{Y_{H}} & 0 & 0 & 1 & 0 & 0 & \frac{-(1-Y_{H})}{Y_{H}} & 0 & -i_{XB} & 0 & 0 & -\frac{i_{XB}}{14}\\ 0 & -\frac{1}{Y_{H}} & 0 & 0 & 1 & 0 & 0 & \frac{-(1-Y_{H})}{Y_{H}} & 0 & -i_{XB} & 0 & 0 & -\frac{i_{XB}}{14} \end{array} } \right]'],
+   [ '6', 'Just some relevant equation', '✔️', '',  '\epsilon = \frac{{z-\theta^{T} \phi}}{1+\phi^{T}\phi}'],
+   [ '7',           'Relevant equation', '✔️', '',  '\phi=\left[ {\begin{array}{cc}  {C_{f,3}} x_{\phi}+{D_{f,3}} y \\ {C_{f,2}}  x_{\phi}+D_{f,2} y \\ C_{f,1} x_{\phi}+{D_{f,1}} y \end{array} } \right]'],
+   [ '8',           'Relevant equation', '✔️', '3', 'xu_{tot}=interpolate(X_{solv},y)'],
+   [ '9',           'Relevant equation', '✔️', '',  'X_{solv}=g_{idx}'],
+   ['10',      'Two equations in a row', '❌', '',  'A = \left[ {\begin{array}{cc}  -1 & 0 & 0 \\ 0 & -1  & 0\\ 0 & 1  & 0 \\ 0 & 0  & -1\end{array} } \right], \space \space \space b^{T}=\left[ {\begin{array}{cc}  10 & 0 & -1 & 0.1 \end{array} } \right]'],
+   ['11',             'Pertaining ✔️4', '✔️', '',   'x \in \mathbb{R}^{n}'],
+   ['12',                           '',  '✔️', '',  'b^{T}=\left[ {\begin{array}{cc}  10 & 0 & -1 & 0.1 \end{array} } \right]'],
+   ['13',             'Pertaining ✔️4', '✔️', '',   'A \in \mathbb{R}^{n \times 2}'],
+   ['14',                            '', '❌', '',   '\dot{P}=\beta P - P \frac{\phi \phi^{T}}{m^{2}}P + interpolate(X_{solv},y)'],
+   ['15',        'Requires new section', '❌','',   'x_{k+1}=x_{k}+a_{k} \frac{dy(x_{k})}{dx}'],
+   ['16','multiplication does not work', '❌', '',  'A^{*} =s^{4}+s^{3}+96.8s^{2}-314.78s+522'],
+   ['17',              'error case 9a.', '❌', '',  'A^{*} =s^{4}+s^{3}+96.8 s^{2}-314.78 s+522'],
 ]
 
-I__TEST_EXAMPLE = 2
+I__TEST_EXAMPLE = 17
 
 s = EXAMPLES[I__TEST_EXAMPLE-1][-1]
 
@@ -439,6 +440,19 @@ s = EXAMPLES[I__TEST_EXAMPLE-1][-1]
 
 s = s.replace('\frac', '\\frac')
 s = s.replace('\beta', '\\beta')
+
+
+# Sec. -1: Get all symbols in order to create a list of variables
+operators = "+", "-", "**", "*", "/", "(", ")", "{", "}", " ", "==", "=", "[", "]", "^"
+s_no_operator = s
+for operator in operators:
+    s_no_operator = s_no_operator.replace(operator, ' ')
+    
+print(s_no_operator)
+s__symbols_and_numbers = list(set(s_no_operator.split()))
+
+
+# ================================================================================================================================================================================================
 
 
 # Sec. 0: Map brace encounters and get in-brace expressions ================================================================
@@ -682,8 +696,9 @@ for M in matrices:
 #       - ⚠ Cannot always accept the multiplication: e.g. if there's "12 12" somewhere, then it is wrong when writing math alltogether
 
 ### Examples
-ex1_done = 'S_P S_H+ a1A+Bb**2 +B / (12 + A B)'
+ex1_done = 'S_P S_H+ a1A+Bb**2 +B / (12 + 2 B)'
 comma_operator = D['pars']['special-operators']['comma'] # because regex doesn't let me!
+# s1 = ex1_done
 s1 = s1.replace(',', comma_operator)
 patt1 = r"\b[a-zA-Z]\w*"
 patt2 = '['+comma_operator+',a-z,A-Z,0-9,\-,\+,\*\*,\(,\),\{,\},/,\_,=,\.,\[,\]]*'
@@ -739,6 +754,7 @@ parenthesis_category = categorize_parenthesis_opening(pc2)
 
 pc1Conds = [x[2] for x in pc1]
 for i_pc in range(len(pc1Conds[:-1])):
+    # if current entry and next entry are not operators (meaning that we probably have multiplication without the symbol "*")
     if not (pc1Conds[i_pc] or pc1Conds[i_pc+1]):
         ii0 = pc1[i_pc][0]+1
         while pcT[ii0] in toRemove:
